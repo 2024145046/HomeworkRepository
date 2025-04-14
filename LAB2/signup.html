@@ -1,0 +1,72 @@
+<!--
+select (dropdown)과 radio 모두 사용 (ok)
+최소 5개의 각기 다른 HTML5 input 사용
+    text, date, radio, number, password (ok)
+하나의 input마다 아래를 1회 이상 사용
+    autofocus (ok)
+    placeholder (ok)
+    required (ok)
+    step (ok)
+    autocomplete (ok)
+login.html 페이지로 redirection 해주는 기능
+-->
+
+
+<html>
+    <head>
+        <meta charset="utf-8">
+        <title>IP_LAB2_2024145046_조윤근</title>
+        <link rel = "stylesheet" type = "text/css" href = "main.css">
+    </head>
+    <body>
+        <h1>회원가입 페이지</h1>
+        <h2><a href="signup.html">회원가입</a> | <a href="login.html">로그인</a></h2>
+    
+        <div class="form">
+            <form method="GET" action="login.html">
+                <p>
+                    <label>이름:</label>
+                    <input name="name" type="text" autofocus placeholder="이서준" required autocomplete="on">
+                </p>
+                <p>
+                    <label>생일:</label>
+                    <input name="date" type="date" required>
+                </p>
+                <p>
+                    <label>성별:</label>
+                    <span>
+                        <input name="gender" type="radio" value="male" required> 남성
+                        <input name="gender" type="radio" value="female"> 여성
+                        <input name="gender" type="radio" value="other"> 크레파스
+                    </span>
+                </p>
+                <p>
+                    <label>학년:</label>
+                    <input name="grade" type="number" step="1" min="1" required>
+                </p>
+                <p>
+                    <label>아이디:</label>
+                    <input name="id" type="text" required>
+                </p>
+                <p>
+                    <label>비밀번호:</label>
+                    <input name="pw" type="password" required>
+                </p>
+                <p>
+                    <label>혈액형:</label>
+                    <select id="bloodType" name="bloodType" required>
+                        <option value="A">A형</option>
+                        <option value="B">B형</option>
+                        <option value="AB">AB형</option>
+                        <option value="O">O형</option>
+                        <option value="misc">기타</option>
+                    </select>
+                </p>
+                <p>
+                    <input type="submit" value="Signup">
+                    <input type="reset" value="Cancel">
+                </p>
+            </form>
+        </div>
+    </body>
+</html>

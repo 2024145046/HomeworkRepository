@@ -1,0 +1,72 @@
+/*
+<link rel = "stylesheet" type = "text/css" href = "main.css"> 사용
+
+다음 properties 모두 사용
+    background-color (ok)
+    text-align (ok)
+    padding (ok)
+    margin (ok)
+    border (ok)
+    font-size (ok)
+    font-family (ok)
+    color (ok)
+    width (ok)
+    height (ok)
+*/
+
+body { font-family: Arial, Helvetica, sans-serif; font-size: 1.0em; }
+h1  { text-align: center; font-size: 2.0em; }
+h2  { text-align: center; font-size: 0.9em; font-weight: normal; }
+div.form { margin-bottom: 1em;
+      margin: auto;
+      padding-left: 1.5em; 
+      padding-right: 2.0em;
+      padding-top: 0.5em;
+      padding-bottom: 1em;
+      width : 350px;
+      min-height : 80px;
+      border-style: double; 
+      border-width: thick; }
+a:link { text-decoration: underline; color:black; }
+a:visited { text-decoration: underline; color:blue; }
+a:hover { text-decoration: underline; color:red; }
+
+.form p {
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+  }
+  
+  .form label {
+    width: 80px;
+    font-weight: bold;
+  }
+  
+  .form input,
+  .form select {
+    padding: 4px;
+    box-sizing: border-box;
+  }
+
+  input[type="submit"] {
+    background-color: lightgreen;
+    color: black;
+    border: none;
+    padding-top: 6px;
+    padding-bottom: 6px;
+    padding-left: 12px;
+    padding-right: 12px;
+    border-radius: 5px;
+    margin-right: 1em;
+  }
+  
+  input[type="reset"] {
+    background-color: red;
+    color: white;
+    border: none;
+    padding-top: 6px;
+    padding-bottom: 6px;
+    padding-left: 12px;
+    padding-right: 12px;
+    border-radius: 5px;
+  }
