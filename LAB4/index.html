@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>인프밍 영화 정보</title>
+    <link rel="stylesheet" href="main.css">
+</head>
+<body>
+    <div class="indexhtml">
+            <h1>과제4 메인페이지</h1>
+            
+            <nav class = "nav_container">
+                <a href="index.html"> 메인페이지 </a>
+                <a href="signup.html">회원가입</a>
+                <a href="login.html"> 로그인 </a>
+            </nav>
+
+        <div class="search-filter-container">
+            <div class="search-container">
+                <input type="text" id="searchInput" placeholder="영화 제목이나 줄거리를 입력하세요. (ex. Toy Story / Riley): ">
+                <button id="searchButton">Filter results</button>
+            </div>
+            <div class="sort-options">
+                <h3>정렬 기준</h3>
+                <label><input type="radio" name="sort" value="rating_descend"> 평점 내림차순</label>
+                <label><input type="radio" name="sort" value="rating_ascend"> 평점 오름차순</label>
+                <label><input type="radio" name="sort" value="date_descend"> 개봉일 내림차순</label>
+                <label><input type="radio" name="sort" value="date_ascend"> 개봉일 오름차순</label>
+            </div>
+        </div>
+        
+        <h2>Movies</h2>
+        <div id="movie-grid">
+        </div>
+
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const movieGrid = document.getElementById('movie-grid');
+            const searchInput = document.getElementById('searchInput');
+            const searchButton = document.getElementById('searchButton');
+            const sortRadios = document.querySelectorAll('input[name="sort"]');
+
+            let allMovies = [];
+            let filteredMovies = [];
+            let displayedMoviesCount = 0;
+            const moviesPerLoad = 8; 
+            let isLoading = false; 
+
+
+            async function fetchData(url) {
+                const response = await fetch(url);
+                return checkStatus(response); 
+            }
+
+
+            function checkStatus(response) {
+                if (response.ok) {
+                    return response.json(); 
+                } else {
+                    return Promise.reject(new Error(`HTTP 오류-상태: ${response.status} (${response.statusText})`));
+                }
+            }
+
+            function processInitialData(movies) {
+                allMovies = movies;
+                filteredMovies = [...allMovies];
+                loadInitialMovies(); 
+            }
+
+            function handleError(error) {
+                console.error("오류:", error);
+                movieGrid.innerHTML = `<p>오류가 발생했습니다.: ${error.message}. 나중에 다시 시도해주세요.</p>`;
+            }
+
+            async function initializeMovieApp() {
+                try {
+                    const movies = await fetchData('product.json'); 
+                    processInitialData(movies);
+                } catch (error) {
+                    handleError(error);
+                }
+            }
+
+            function createMovieCard(movie) {
+                const card = document.createElement('div');
+                card.classList.add('movie-card');
+
+                const poster = document.createElement('img');
+                poster.src = movie.poster_path;
+                poster.alt = movie.title;
+
+                const title = document.createElement('h3');
+                title.textContent = movie.title;
+
+                const releaseDate = document.createElement('p');
+                releaseDate.textContent = `개봉일: ${movie.release_date}`;
+
+                const rating = document.createElement('p');
+                rating.textContent = `평점: ${movie.vote_average} / 10`;
+                
+                const movieInfoDiv = document.createElement('div');
+                movieInfoDiv.classList.add('movie-info');
+                movieInfoDiv.appendChild(title);
+                movieInfoDiv.appendChild(releaseDate);
+                movieInfoDiv.appendChild(rating);
+
+                const plotOverlay = document.createElement('div');
+                plotOverlay.classList.add('movie-plot-overlay');
+                plotOverlay.innerHTML = `줄거리: <br> ${movie.overview}`;
+
+                card.appendChild(poster);
+                card.appendChild(movieInfoDiv);
+                card.appendChild(plotOverlay);
+                
+                return card;
+            }
+            
+            function loadInitialMovies() {
+                displayedMoviesCount = 0; 
+                movieGrid.innerHTML = '';
+                loadMoreMovies(); 
+            }
+
+            function loadMoreMovies() {
+                if (isLoading) return; 
+                if (displayedMoviesCount >= filteredMovies.length) { 
+                    return;
+                }
+
+                isLoading = true;
+
+                const moviesToDisplay = filteredMovies.slice(displayedMoviesCount, displayedMoviesCount + moviesPerLoad);
+                moviesToDisplay.forEach(movie => {
+                    const movieCard = createMovieCard(movie);
+                    movieGrid.appendChild(movieCard);
+                });
+                displayedMoviesCount += moviesToDisplay.length;
+
+                isLoading = false;
+            }
+
+            function applyFilterAndSort() {
+                const searchTerm = searchInput.value.toLowerCase().trim();
+                filteredMovies = allMovies.filter(movie => 
+                    movie.title.toLowerCase().includes(searchTerm) ||  
+                    (movie.overview && movie.overview.toLowerCase().includes(searchTerm))
+                );
+                applySort(); 
+                loadInitialMovies(); 
+            }
+
+            function applySort() {
+                const sortValueChecked = document.querySelector('input[name="sort"]:checked');
+                if (!sortValueChecked) { 
+                    return; 
+                }
+                const sortValue = sortValueChecked.value;
+                switch (sortValue) {
+                    case 'rating_descend':
+                        filteredMovies.sort((a, b) => b.vote_average - a.vote_average);
+                        break;
+                    case 'rating_ascend':
+                        filteredMovies.sort((a, b) => a.vote_average - b.vote_average);
+                        break;
+                    case 'date_descend':
+                        filteredMovies.sort((a, b) => new Date(b.release_date) - new Date(a.release_date));
+                        break;
+                    case 'date_ascend':
+                        filteredMovies.sort((a, b) => new Date(a.release_date) - new Date(b.release_date));
+                        break;
+                }
+            }
+
+            searchButton.addEventListener('click', applyFilterAndSort);
+            searchInput.addEventListener('keypress', (event) => {
+                if (event.key === 'Enter') {
+                    applyFilterAndSort();
+                }
+            });
+
+            sortRadios.forEach(radio => {
+                radio.addEventListener('change', () => {
+                    applySort(); 
+                    loadInitialMovies(); 
+                });
+            });
+            
+            window.addEventListener('scroll', () => {
+                const scrollThreshold = 100; 
+                if (!isLoading && (window.innerHeight + window.scrollY) >= document.documentElement.scrollHeight - scrollThreshold) {
+                    loadMoreMovies();
+                }
+            });
+
+            initializeMovieApp();
+        });
+    </script>
+</body>
+</html>
