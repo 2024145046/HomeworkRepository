@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>인프밍 영화 정보</title>
+    <link rel="stylesheet" href="main.css">
+</head>
+<body>
+    <div class="indexhtml">
+            <h1>과제5 메인페이지</h1>
+            
+            <nav class = "nav_container">
+                <a href="/"> 메인페이지 </a>
+                <a href="/signup">회원가입</a>
+                <a href="/login"> 로그인 </a>
+            </nav>
+
+        <div class="search-filter-container">
+            <div class="search-container">
+                <input type="text" id="searchInput" placeholder="영화 제목이나 줄거리를 입력하세요. (ex. Toy Story / Riley): ">
+                <button id="searchButton">Filter results</button>
+            </div>
+            <div class="sort-options">
+                <h3>정렬 기준</h3>
+                <label><input type="radio" name="sort" value="rating_desc" checked> 평점 내림차순</label>
+                <label><input type="radio" name="sort" value="rating_asc"> 평점 오름차순</label>
+                <label><input type="radio" name="sort" value="date_desc"> 개봉일 내림차순</label>
+                <label><input type="radio" name="sort" value="date_asc"> 개봉일 오름차순</label>
+            </div>
+        </div>
+        
+        <h2 class="movies-title">Movies</h2>
+        <div id="movie-grid">
+            
+            <p>영화 정보를 불러오는 중...</p> 
+        </div>
+
+    </div>
+
+    <script src="/script/main.js"></script>
+</body>
+</html>
